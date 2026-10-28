@@ -1,0 +1,36 @@
+{
+  "name": "san-francisco-vecino",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "test": "vitest run && node --test server/push.test.mjs",
+    "test:server": "node --test server/push.test.mjs",
+    "start": "node server/start.mjs"
+  },
+  "dependencies": {
+    "leaflet": "1.9.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "web-push": "3.6.7",
+    "workbox-core": "7.4.1",
+    "workbox-precaching": "7.4.1",
+    "workbox-routing": "7.4.1"
+  },
+  "devDependencies": {
+    "@types/leaflet": "1.9.22",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "vite-plugin-pwa": "^1.1.0",
+    "vitest": "^4.0.8"
+  }
+}

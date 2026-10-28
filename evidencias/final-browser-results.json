@@ -1,0 +1,336 @@
+{
+  "conditions": {
+    "origin": "http://localhost:4175",
+    "browser": "cached Chromium1208",
+    "appData": "isolated contexts",
+    "location": "mock San Francisco",
+    "externalTiles": "aborted to exercise fallback and avoid bulk requests"
+  },
+  "checks": [
+    {
+      "name": "desktop-home-and-screenshot",
+      "passed": true,
+      "detail": {
+        "cards": 7
+      }
+    },
+    {
+      "name": "desktop-module-bicycles",
+      "passed": true,
+      "detail": {
+        "heading": "Bicicletas públicas",
+        "overflow": false
+      }
+    },
+    {
+      "name": "desktop-module-taxes",
+      "passed": true,
+      "detail": {
+        "heading": "Tributos municipales",
+        "overflow": false
+      }
+    },
+    {
+      "name": "desktop-module-claims",
+      "passed": true,
+      "detail": {
+        "heading": "Centro de reclamos",
+        "overflow": false
+      }
+    },
+    {
+      "name": "desktop-module-contacts",
+      "passed": true,
+      "detail": {
+        "heading": "Líneas de atención",
+        "overflow": false
+      }
+    },
+    {
+      "name": "desktop-module-alarms",
+      "passed": true,
+      "detail": {
+        "heading": "Alarmas comunitarias",
+        "overflow": false
+      }
+    },
+    {
+      "name": "desktop-module-parking",
+      "passed": true,
+      "detail": {
+        "heading": "Estacionamiento medido",
+        "overflow": false
+      }
+    },
+    {
+      "name": "desktop-module-notificaciones",
+      "passed": true,
+      "detail": {
+        "heading": "Notificaciones",
+        "overflow": false
+      }
+    },
+    {
+      "name": "module-switch-regression-and-browser-back",
+      "passed": true,
+      "detail": "Claims → Notifications → browser Back stays mounted without hook errors"
+    },
+    {
+      "name": "claims-validation-upload-persist-download-progress",
+      "passed": true,
+      "detail": {
+        "bytesRoundTripped": 68,
+        "persistedAfterReload": true,
+        "status": "resolved"
+      }
+    },
+    {
+      "name": "tax-payment-and-receipt-download",
+      "passed": true,
+      "detail": "simulated paid state persists; text receipt explicitly academic"
+    },
+    {
+      "name": "leaflet-map-distinct-markers-geo-fallback-bikes-update",
+      "passed": true,
+      "detail": {
+        "passed": true,
+        "markerBoxes": [
+          {
+            "x": 449,
+            "y": 682
+          },
+          {
+            "x": 389,
+            "y": 671
+          }
+        ],
+        "capacity": [
+          {
+            "bicycles": 7,
+            "freeDocks": 5,
+            "capacity": 12
+          },
+          {
+            "bicycles": 2,
+            "freeDocks": 10,
+            "capacity": 12
+          }
+        ],
+        "availabilityChangedAfter10s": true,
+        "mockedLocation": true,
+        "offlineTilesFallback": true,
+        "realMarkerHitTestPassed": true,
+        "actualSvgWidth": 799,
+        "realParkingPolygonClickPassed": true,
+        "offlineMobileMarkerClickPassed": true,
+        "ordinaryOnlineTileResponses": {
+          "requests": 12,
+          "successfulResponses": 12,
+          "failedResponses": 0
+        }
+      }
+    },
+    {
+      "name": "official-whatsapp-link-only",
+      "passed": true,
+      "detail": {
+        "href": "https://wa.me/5493564336062",
+        "clicked": false
+      }
+    },
+    {
+      "name": "alarm-subscription-and-simulated-activation-history",
+      "passed": true,
+      "detail": "subscribed Terminal activation stored a targeted local notification"
+    },
+    {
+      "name": "parking-start-extend-receipt-and-expiry-clock",
+      "passed": true,
+      "detail": "60min +30min extension, two receipts, 2min demo warning and expiry via isolated virtual clock"
+    },
+    {
+      "name": "notification-preferences-filter-frequency",
+      "passed": true,
+      "detail": "paused keeps filtered history; daily suppresses duplicate type/zone; preference survives reload"
+    },
+    {
+      "name": "custom-serviceworker-offline-reload-and-navigation",
+      "passed": true,
+      "detail": "customSW controlled reload + navigation + lazy Leaflet from precache; maps retain fallback without tile network"
+    },
+    {
+      "name": "cold-mobile-throttled-app-load",
+      "passed": true,
+      "detail": {
+        "viewport": "390x844",
+        "coldContext": true,
+        "cacheDisabled": true,
+        "network": "1.6Mbpsdown/0.75Mbpsup/150mslatency",
+        "cpuSlowdown": 4,
+        "appVisibleMs": 1753,
+        "fcpMs": 1764,
+        "observedLcp": {
+          "startTime": 1764,
+          "elementTag": "H1",
+          "elementClass": "",
+          "elementText": "Todo San Francisco,más cerca."
+        },
+        "domContentLoadedMs": 1214.7999999523163,
+        "gzipVerified": true
+      },
+      "threshold": "app visible <3000ms in stated coldmobileconditions"
+    },
+    {
+      "name": "mobile-module-bicycles",
+      "passed": true,
+      "detail": "visible at390px without horizontal overflow"
+    },
+    {
+      "name": "mobile-module-taxes",
+      "passed": true,
+      "detail": "visible at390px without horizontal overflow"
+    },
+    {
+      "name": "mobile-module-claims",
+      "passed": true,
+      "detail": "visible at390px without horizontal overflow"
+    },
+    {
+      "name": "mobile-module-contacts",
+      "passed": true,
+      "detail": "visible at390px without horizontal overflow"
+    },
+    {
+      "name": "mobile-module-alarms",
+      "passed": true,
+      "detail": "visible at390px without horizontal overflow"
+    },
+    {
+      "name": "mobile-module-parking",
+      "passed": true,
+      "detail": "visible at390px without horizontal overflow"
+    },
+    {
+      "name": "mobile-module-notificaciones",
+      "passed": true,
+      "detail": "visible at390px without horizontal overflow"
+    },
+    {
+      "name": "manifest-and-png-icons",
+      "passed": true,
+      "detail": {
+        "display": "standalone",
+        "icons": [
+          {
+            "src": "/pwa-192.png",
+            "width": 192,
+            "height": 192
+          },
+          {
+            "src": "/pwa-512.png",
+            "width": 512,
+            "height": 512
+          },
+          {
+            "src": "/pwa-512.png",
+            "width": 512,
+            "height": 512
+          }
+        ]
+      }
+    },
+    {
+      "name": "genuine-provider-webpush-closed-app-page",
+      "passed": true,
+      "detail": {
+        "browser": "installed chrome headless",
+        "isolatedPersistentProfile": true,
+        "providerHostname": "fcm.googleapis.com",
+        "scheduledThroughUi": true,
+        "appPageClosed": true,
+        "notificationReceived": 1,
+        "historyImportedAfterReopen": true,
+        "unsubscribeThroughUi": true,
+        "serverSubscriptionsRemaining": 0,
+        "ownBrowserProcessesRemaining": 0,
+        "elapsedMs": 39126,
+        "syntheticDispatch": false
+      }
+    },
+    {
+      "name": "synthetic-sw-inbox-and-click-route",
+      "passed": true,
+      "detail": {
+        "method": "CDP ServiceWorker.deliverPushMessage; synthetic test ONLY, not provider delivery",
+        "route": "alarms",
+        "distinctFromGenuinePush": true
+      }
+    }
+  ],
+  "errors": [],
+  "screenshots": [
+    {
+      "name": "final-desktop-home.png",
+      "bytes": 81348,
+      "exists": true
+    },
+    {
+      "name": "final-desktop-claims.png",
+      "bytes": 82295,
+      "exists": true
+    },
+    {
+      "name": "final-desktop-notifications.png",
+      "bytes": 248830,
+      "exists": true
+    },
+    {
+      "name": "final-mobile-home.png",
+      "bytes": 66181,
+      "exists": true
+    },
+    {
+      "name": "final-desktop-map-online.png",
+      "bytes": 245235,
+      "exists": true
+    },
+    {
+      "name": "final-offline-map-fixed.png",
+      "bytes": 76234,
+      "exists": true
+    }
+  ],
+  "historicalBeforeFix": {
+    "performance": {
+      "coldContext": true,
+      "viewport": "390x844",
+      "downloadMbps": 1.6,
+      "uploadMbps": 0.75,
+      "latencyMs": 150,
+      "cpuSlowdown": 4,
+      "appVisibleMs": 3548,
+      "appUnder3s": false,
+      "fcp": 3352,
+      "lcpObserved": 3352,
+      "domContentLoaded": 2531.100000023842
+    },
+    "notes": [
+      "Initial 3548ms cold-mobile load before Node gzip; current retest1753ms",
+      "Old full-map screenshots before Leaflet SVG width fix are historical only",
+      "Initial temporary incognito Chromium/Edge push denial was test-profile restriction; genuine persistent Chrome later passed"
+    ]
+  },
+  "limitations": [
+    "Actual phone hardware and installed-PWA standalone UI not exercised",
+    "Firefox, Safari and persistent Edge push not tested",
+    "Real OS banner/click not visually inspected; real provider receipt confirmed via SW notification API and IndexedDB history; notification route separately tested by synthetic click",
+    "Municipal data, bicycle availability, payments and alarms are intentionally simulated; WhatsApp link inspected without sending"
+  ],
+  "summary": {
+    "checks": 28,
+    "passed": 28,
+    "failed": 0,
+    "pageOrConsoleErrors": 0,
+    "currentScreenshots": 6
+  }
+}

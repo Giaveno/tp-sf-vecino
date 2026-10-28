@@ -1,0 +1,18 @@
+{
+  "method": "CDP ServiceWorker.deliverPushMessage; synthetic test ONLY, not provider delivery",
+  "genuineProviderDelivery": false,
+  "appPageClosedDuringDispatch": true,
+  "dispatched": true,
+  "serviceWorkerNotificationShown": true,
+  "inboxImportedAfterReopen": true,
+  "history": [
+    {
+      "type": "alarm",
+      "zone": "centro",
+      "target": "alarms",
+      "deliveryChannel": "push"
+    }
+  ],
+  "syntheticNotificationClickRoute": "alarms",
+  "disableWithoutProviderSubscriptionGraceful": true
+}

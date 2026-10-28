@@ -1,0 +1,26 @@
+{
+  "browser": "installed chrome headless",
+  "isolation": "new task-owned persistent profile, no user profile",
+  "offTheRecord": false,
+  "genuineProviderDelivery": true,
+  "syntheticDispatch": false,
+  "support": {
+    "permission": "granted",
+    "pushManager": true,
+    "secure": true,
+    "controlled": true
+  },
+  "subscriptionSettled": true,
+  "status": "Web Push activado. El emisor Node debe permanecer funcionando y tener Internet.",
+  "serverRegistered": true,
+  "browserSubscription": {
+    "present": true,
+    "providerHostname": "fcm.googleapis.com"
+  },
+  "scheduledThroughUi": true,
+  "appPageClosedDuringDelivery": true,
+  "notifications": 1,
+  "historyImportedAfterReopen": true,
+  "unsubscribedThroughUi": true,
+  "elapsedMs": 39126
+}

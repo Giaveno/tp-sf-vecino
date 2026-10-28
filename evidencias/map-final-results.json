@@ -1,0 +1,21 @@
+{
+  "screenshots": [
+    {
+      "name": "final-desktop-map-online.png",
+      "bytes": 245235
+    },
+    {
+      "name": "final-offline-map-fixed.png",
+      "bytes": 76234
+    }
+  ],
+  "externalTiles": {
+    "requests": 12,
+    "successfulResponses": 12,
+    "failedResponses": 0
+  },
+  "bicycleMapClickSelectedTerminal": true,
+  "svgWidth": 799,
+  "parkingPolygonClickSelectedTerminal": true,
+  "offlineMobileMarkerClick": true
+}
