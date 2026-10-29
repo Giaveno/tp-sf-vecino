@@ -75,8 +75,8 @@ test('same-origin subscription lifecycle, preferences, authorization and expired
   } finally { await new Promise((resolve) => server.close(resolve)) }
 })
 test('provider expiry with a disk error stays recoverable and does not stop the application', async () => {
-  const records = new Map(); let writes = 0
-  const server = createPushServer({ records, publicKey: 'test', persist() { if (++writes === 3) throw Object.assign(new Error('disk full'), { code: 'ENOSPC' }) }, send: async () => { throw Object.assign(new Error('gone'), { statusCode: 410 }) } })
+  const records = new Map(); let providerExpired = false
+  const server = createPushServer({ records, publicKey: 'test', persist() { if (providerExpired) throw Object.assign(new Error('disk full'), { code: 'ENOSPC' }) }, send: async () => { providerExpired = true; throw Object.assign(new Error('gone'), { statusCode: 410 }) } })
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve))
   const base = `http://127.0.0.1:${server.address().port}`
   const request = (path, body) => fetch(`${base}${path}`, { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: JSON.stringify(body) })

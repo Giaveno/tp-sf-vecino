@@ -1,6 +1,10 @@
 # San Francisco Vecino TP5
 
-PWA de servicios municipales con React, TypeScript y Vite. Integra un mapa geográfico, geolocalización, acceso al WhatsApp oficial y transporte Web Push mediante un emisor Node local. Trámites, pagos, disponibilidad y alarmas municipales son simulaciones académicas identificadas como tales. No requiere Firebase, Neon ni cuentas externas.
+PWA de servicios municipales con React, TypeScript y Vite. Integra mapa geográfico, geolocalización, WhatsApp oficial y Web Push real. Trámites, pagos, disponibilidad y alarmas son simulaciones académicas. El modo local usa Node y archivos privados; la publicación utiliza Vercel Functions y Neon PostgreSQL, sin Redis ni Docker.
+
+## Publicar en Vercel
+
+El repositorio está en https://github.com/Giaveno/tp-sf-vecino. La configuración de Functions, Neon, variables privadas y dominio HTTPS está en [DEPLOYMENT.md](DEPLOYMENT.md). Node 24.x y pnpm 10.34.9 están fijados para el despliegue. Las credenciales se guardan en `.env.local`, excluido de Git; no deben enviarse al frontend ni escribirse en variables `VITE_*`.
 
 ## Ejecutar la demostración completa
 
@@ -14,7 +18,7 @@ pnpm start
 
 Abrir **http://localhost:4175/** y mantener Node funcionando. El mismo origen sirve la aplicación compilada y `/api/push/*`; el service worker propio conserva el precache y recibe push. No alternar localhost y 127.0.0.1: son orígenes con datos y permisos diferentes. Si el puerto está ocupado, elegir otro `PORT` en esa consola antes de iniciar Node.
 
-`pnpm dev` sirve para editar y tiene proxy hacia Node para `/api`; no sustituye la demostración de producción del worker. `pnpm preview` no incluye el emisor push. En un teléfono físico, HTTP sobre la IP de la computadora no equivale a localhost seguro: geolocalización, instalación y push necesitan HTTPS. El emisor incluido acepta exclusivamente localhost/127.0.0.1; su publicación pública requiere adaptar el despliegue y el control de acceso.
+`pnpm dev` sirve para editar y tiene proxy hacia Node para `/api`; no sustituye la demostración de producción del worker. `pnpm preview` no incluye el emisor push. En un teléfono físico, HTTP sobre la IP de la computadora no equivale a localhost seguro: geolocalización, instalación y push necesitan HTTPS. El emisor local conserva su restricción a localhost; Vercel utiliza el adaptador HTTPS con origen explícito y persistencia Neon.
 
 ## Probar Web Push
 
@@ -62,7 +66,7 @@ El comando `test` incluye Vitest y Node:test. En este equipo pnpm puede reconcil
 
 ```powershell
 .\node_modules\.bin\vitest.cmd run
-node --test server/push.test.mjs
+node --test server/push.test.mjs server/cloud.test.mjs
 .\node_modules\.bin\oxlint.cmd
 .\node_modules\.bin\tsc.cmd -b
 # Solo si TypeScript termina correctamente:
@@ -71,3 +75,5 @@ node server/start.mjs
 ```
 
 Alcance: [SPECS.md](SPECS.md). Arquitectura y fuentes: [INFORME.md](INFORME.md). Resultados y pendientes: [PRUEBAS.md](PRUEBAS.md). Material sanitizado para entregar: [evidencias](evidencias/QA_REPORT.md).
+
+Las pruebas reales de PostgreSQL se ejecutan aparte con `pnpm test:neon`: requieren la conexión privada y la migración aplicada. Usan datos ficticios con aislamiento y limpieza propios; no envían avisos a un proveedor real.

@@ -15,7 +15,9 @@ flowchart TD
   C --> D[localStorage y fallback en memoria]
   B --> E[Leaflet y OpenStreetMap]
   B --> F[Servicio de disponibilidad simulado]
-  B --> G[API local Node Web Push]
+  B --> G[Servicio compartido Web Push]
+  G --> L[Adaptador local con archivos]
+  G --> M[Vercel Functions y Neon PostgreSQL]
   G --> H[Proveedor push del navegador]
   H --> I[Service worker propio]
   I --> J[Inbox IndexedDB]
@@ -30,7 +32,8 @@ flowchart TD
 | Repositorio | Aísla localStorage, valida cada registro y conserva cambios en memoria si se rechaza una escritura. Permite sustituir la persistencia sin rehacer las pantallas. |
 | Leaflet | Coordenadas geográficas, marcadores y polígonos distintos por servicio; carga de biblioteca separada y lista accesible como alternativa. |
 | Servicio de bicicletas | Contrato reemplazable que publica disponibilidad variable, anclajes y fecha. Respeta capacidad y cancela su temporizador sin suscriptores. |
-| Node y Web Push | Emisor pequeño, sin base externa ni cuenta Firebase. Sirve el build y la API en el mismo origen local. |
+| Node y Web Push | Servicio compartido asíncrono con adaptadores HTTP local y Vercel. El modo local sirve el build y conserva archivos; el remoto usa PostgreSQL por HTTP. |
+| Neon PostgreSQL | Suscripciones, preferencias, reservas y cuotas persistentes. Restricciones únicas, comparación de versiones y operaciones transaccionales evitan sobrescrituras entre Functions concurrentes. |
 | Worker e IndexedDB | Recibe push, muestra aviso y admite destinos internos. Conserva eventos cuando no hay pestaña abierta y los mezcla al volver. |
 | Vite PWA | `injectManifest` permite eventos propios conservando precache de la aplicación. No almacena masivamente teselas externas. |
 
@@ -46,13 +49,13 @@ Reclamos conserva archivos JPG/PNG/PDF completos hasta 512 KiB por adjunto con p
 
 ## Transporte Web Push
 
-La clave privada VAPID y las suscripciones quedan en `.local/`, excluido del repositorio y del contenido servido. Cada registro tiene una credencial para modificar preferencias, cancelar y enviar solo a su propia suscripción. Volver a registrar un endpoint existente exige la credencial anterior. Se validan origen, tamaño de solicitud y proveedores HTTPS conocidos; hay límites de intentos y limpieza de suscripciones vencidas.
+En modo local, VAPID y suscripciones quedan en `.local/`, excluido del repositorio y del contenido servido. En Vercel, las claves son variables privadas y las suscripciones se conservan en el esquema propio `tp5_push` de Neon. Cada registro tiene una credencial para modificar preferencias, cancelar y enviar solo a su propia suscripción. Volver a registrar un endpoint existente exige la credencial anterior. Se validan origen, tamaño de solicitud y proveedores HTTPS conocidos.
 
 La prueba se programa diez segundos después para permitir cerrar la pestaña. El contenido municipal es ficticio; el transporte es real. HTTP 202 confirma programación, y aceptación del proveedor no implica recepción del sistema operativo. Los resultados diferidos se registran sin secretos y los errores se contienen, incluso ante una falla de disco.
 
 El worker guarda hasta 100 eventos en IndexedDB y solo abre destinos internos conocidos. Al volver, la aplicación consulta el historial más reciente después de esperar el inbox, para conservar eventos locales y cambios de lectura concurrentes. La cuota diaria utiliza el día de Argentina, por tipo/zona y separadamente por canal. Pausar no elimina el historial. Los recordatorios locales de tributos y estacionamiento requieren la app abierta; no se presentan como tareas remotas de servidor.
 
-El servidor es educativo y se enlaza a 127.0.0.1. Para publicar se necesitarían HTTPS, políticas de origen y autenticación/autorización apropiadas; no se expone automáticamente a Internet. Un teléfono físico no puede usar todas estas capacidades mediante la IP HTTP de la computadora.
+El servidor local se enlaza a 127.0.0.1. La Function remota exige un origen HTTPS explícito, limita solicitudes y opera con Neon sin escribir archivos. La demora de demostración usa `waitUntil` dentro del tiempo máximo de la Function; no se presenta como una cola durable. Las instrucciones de publicación están en [DEPLOYMENT.md](DEPLOYMENT.md). Un teléfono físico no puede sustituir HTTPS por la IP HTTP del servidor local.
 
 ## Problemas encontrados y soluciones
 
@@ -70,13 +73,13 @@ El servidor es educativo y se enlaza a 127.0.0.1. Para publicar se necesitarían
 
 ## Calidad y entrega
 
-Pruebas automatizadas, TypeScript y lint verifican reglas y contratos: 45 pruebas frontend y seis del servidor aprobaron, con un total actual de 51. La ejecución de navegador verificó recorridos móviles/escritorio, mapas seleccionables y fallback offline. El transporte Web Push se comprobó con una suscripción FCM genuina desde un perfil Chrome de prueba: pestaña cerrada, worker receptor, recuperación del historial y cancelación. No se confunde este resultado con el despacho sintético utilizado antes para aislar el worker.
+La adaptación a Vercel verificó 45 pruebas frontend y 15 del servidor, 60 en total, además de siete comprobaciones reportadas por Node:test contra Neon real. Estas últimas cubren propietario único, versiones, capacidad, cuota concurrente, cancelación y preferencias durante la demora y confirmación durable después de aceptar el proveedor simulado. La ejecución histórica de navegador verificó recorridos móviles/escritorio, mapas y fallback offline. El transporte FCM genuino se comprobó anteriormente en modo local; no se presenta como una verificación del dominio Vercel todavía no publicado.
 
 La carga móvil simulada bajó de aproximadamente 3,55 s de contenido visible a 1,75 s al incorporar gzip estático; FCP/LCP observado 1,764 s. La verificación de navegador cerró con 28 de 28 comprobaciones aprobadas y cero errores de la aplicación. La matriz está en [PRUEBAS](PRUEBAS.md) y el material sanitizado en [evidencias](evidencias/QA_REPORT.md). Los resultados anteriores a las correcciones se conservan como historial, no como fallos actuales.
 
 No se certifican todos los dispositivos o navegadores ni el banner/clic físico del sistema operativo. Los datos personales deben ser ficticios en la demostración; validación y permisos no certifican por sí solos cumplimiento normativo productivo.
 
-README contiene ejecución y recorrido. El alumno debe preparar el repositorio remoto y la demostración en clase; ninguna publicación se realiza automáticamente.
+README contiene ejecución y recorrido. El código está publicado en GitHub; la configuración de Vercel y la demostración en clase siguen siendo pasos externos. Las evidencias históricas se conservan sin alterar sus resultados.
 
 ## Fuentes
 

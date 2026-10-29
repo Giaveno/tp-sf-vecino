@@ -5,7 +5,8 @@
 Entorno: Windows, Node v26.1.0 y dependencias resueltas por lockfile. Se usaron binarios locales para evitar reconciliaciones automáticas concurrentes de pnpm.
 
 - **45 pruebas frontend aprobadas, 11 archivos, 0 fallos**: Vitest.
-- **6 pruebas backend aprobadas, 0 fallos**: Node:test. Total actual: **51 pruebas** entre frontend y backend.
+- **15 pruebas backend aprobadas, 0 fallos**: Node:test. Total actual: **60 pruebas** entre frontend y backend.
+- **7 comprobaciones aprobadas contra Neon real**, ejecutadas aparte: suite de integración más seis subcasos. No utilizan un emisor push real.
 - TypeScript correcto, lint sin advertencias y build de producción correcto.
 - JS principal 272,85 kB / 85,19 kB gzip; Leaflet separado 148,61 kB / 43,32 kB gzip; CSS 25,07 kB / 9,17 kB gzip. Worker propio `injectManifest`, 16 recursos precacheados, 447,86 KiB. No se precarga el mapa externo.
 
@@ -24,6 +25,10 @@ La prueba global inicial incluyó por error suites Node:test y copias de respald
 Los tests backend sustituyen el proveedor por un doble: no prueban recepción real de Web Push. Se observaron fallos esperados antes de las correcciones de disponibilidad, contratos ausentes, apropiación de suscripción, carrera del inbox, promesa diferida y compresión.
 
 Revisión previa a publicación del **2026-10-28**: si fallaba la persistencia del alta push, quedaba en memoria un registro cuya credencial no había recibido el cliente; el reintento devolvía 403. Se observó la regresión RED y, tras incorporar rollback del alta y de las actualizaciones autorizadas, las seis pruebas Node:test pasaron. Esta comprobación no repite ni modifica la evidencia anterior de navegador: conserva sus 28 comprobaciones y la ejecución automatizada histórica de 50 pruebas.
+
+Adaptación **2026-10-29**: servicio asíncrono compartido por Node y Vercel; pruebas de configuración ausente, origen, programación con `waitUntil`, cambio concurrente de preferencias, baja durante la demora y respuesta degradada cuando el proveedor aceptó pero falla la persistencia. El límite diario local permanece en memoria si falla el disco. En Neon real se verificaron restricciones únicas de propietario, rechazo de CAS obsoleto, reserva única, límite de capacidad, 35 solicitudes concurrentes con exactamente 30 aceptadas, limpieza de cuota vencida y actualización atómica del resultado sin perder preferencias concurrentes. Los registros ficticios fueron eliminados por su namespace e identificadores propios. La migración afectó únicamente el esquema `tp5_push`.
+
+La recepción real de push desde un dominio Vercel y el comportamiento en dispositivos físicos siguen pendientes de la configuración del despliegue. Los resultados de FCM y rendimiento de las secciones siguientes pertenecen a la ejecución local histórica, no a una medición nueva de Vercel.
 
 ## Matriz de navegador
 
@@ -68,7 +73,7 @@ Quedan fuera de esta evidencia la instalación física, el banner/clic real del 
 
 ```powershell
 .\node_modules\.bin\vitest.cmd run
-node --test server/push.test.mjs
+node --test server/push.test.mjs server/cloud.test.mjs
 .\node_modules\.bin\oxlint.cmd
 .\node_modules\.bin\tsc.cmd -b
 # Solo si TypeScript termina correctamente:
@@ -77,3 +82,5 @@ node server/start.mjs
 ```
 
 Para offline: primera carga de producción, esperar activación del worker y después desconectar. Para teléfono físico, la IP HTTP de la computadora no sustituye HTTPS. Las notificaciones del sistema dependen también de la configuración del dispositivo.
+
+Para repetir únicamente la integración PostgreSQL autorizada: `pnpm test:neon`, con `DATABASE_URL` en el archivo privado. Nunca publicar ese archivo ni volcar errores de conexión con sus credenciales.

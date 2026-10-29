@@ -14,10 +14,10 @@ async function api(path: string, body?: unknown) {
   const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 8000)
   try {
     const response = await fetch(`/api/push/${path}`, { method: body ? 'POST' : 'GET', headers: body ? { 'Content-Type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined, signal: controller.signal })
-    const result = await response.json().catch(() => ({ error: 'Iniciá el servidor Node para usar Web Push.' }))
+    const result = await response.json().catch(() => ({ error: 'El emisor push no devolvió una respuesta válida. El historial sigue disponible.' }))
     if (!response.ok) throw new Error(result.error ?? 'No fue posible completar la operación push.')
     return result
-  } catch (error) { if (error instanceof DOMException && error.name === 'AbortError') throw new Error('El emisor local no respondió a tiempo. El historial sigue disponible.'); throw error }
+  } catch (error) { if (error instanceof DOMException && error.name === 'AbortError') throw new Error('El emisor push no respondió a tiempo. El historial sigue disponible.'); throw error }
   finally { clearTimeout(timer) }
 }
 export function hasPushAccount(): boolean { return Boolean(account()) }
@@ -27,7 +27,7 @@ export async function enablePush(preferences: NotificationPreferences): Promise<
   if (await Notification.requestPermission() !== 'granted') throw new Error('Permiso no concedido. Podés continuar con el historial dentro de la app.')
   const config = await api('config'), raw = atob(config.publicKey.replace(/-/g, '+').replace(/_/g, '/'))
   const applicationServerKey = Uint8Array.from(raw, (character) => character.charCodeAt(0))
-  const registration = await Promise.race([navigator.serviceWorker.ready, new Promise<never>((_, reject) => setTimeout(() => reject(new Error('El service worker no está listo. Ejecutá el build y abrí la aplicación desde Node.')), 8000))])
+  const registration = await Promise.race([navigator.serviceWorker.ready, new Promise<never>((_, reject) => setTimeout(() => reject(new Error('La aplicación aún no está lista para activar avisos. Recargá e intentá nuevamente.')), 8000))])
   const subscription = await registration.pushManager.getSubscription() ?? await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey })
   saveAccount(await api('subscriptions', { ...account(), subscription: subscription.toJSON(), preferences }))
 }

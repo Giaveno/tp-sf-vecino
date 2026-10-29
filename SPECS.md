@@ -23,12 +23,12 @@ PWA académica para los siete servicios del TP5. La investigación acotada no lo
 - **Datos y privacidad:** validación de registros y archivos, límites de volumen, ubicación y permisos solo por acción expresa; no guardar datos bancarios ni exponer claves VAPID privadas.
 - **Rendimiento:** objetivo de carga menor a tres segundos, medido con navegador/equipo/red/caché identificados. Build y tamaño de archivos no sustituyen la medición.
 - **Mantenibilidad:** separar pantallas, dominio, repositorio, servicios y transporte; probar reglas y recuperación ante errores.
-- **Escalabilidad:** contratos reemplazables para servicios simulados. El emisor incluido es una demostración local, no una plataforma pública multiusuario.
+- **Escalabilidad:** contratos reemplazables y servicio push compartido por adaptadores local y Vercel. El despliegue remoto persiste estado concurrente en PostgreSQL; continúa siendo un prototipo académico sin autenticación municipal.
 
 ## Límites y entrega
 
 Pagos, estados municipales, alarmas y zonas de estacionamiento son ficticios. Mapa base, geolocalización, acceso a WhatsApp y transporte push son reales. No hay autenticación municipal, API municipal conectada ni sincronización de trámites entre dispositivos.
 
-Los recordatorios locales requieren app abierta y se reconcilian al volver. Web Push depende de proveedor, permisos, Internet y emisor funcionando; no se garantiza entrega con el navegador completamente cerrado. La frecuencia diaria cuenta por separado los canales local y push. Las suscripciones y claves se guardan en `.local/`, mientras datos funcionales e inbox quedan en el navegador.
+Los recordatorios locales requieren app abierta y se reconcilian al volver. Web Push depende de proveedor, permisos, Internet y emisor; no se garantiza entrega con el navegador completamente cerrado. La cuota diaria separa canales local y push. El modo local guarda suscripciones y claves en `.local/`; Vercel usa Neon y variables privadas. Datos funcionales e inbox permanecen en el navegador. La demora de prueba usa `waitUntil`, sin prometer una cola durable ante terminación de la Function.
 
-La entrega incluye código, README, informe de arquitectura y pruebas con evidencia. Preparar repositorio remoto y demostración en clase son pasos posteriores: no se publican automáticamente.
+La entrega incluye código publicado en GitHub, README, informe y pruebas con evidencia. La configuración del dominio Vercel se documenta en DEPLOYMENT.md y sigue pendiente; la demostración en clase es una actividad posterior.
